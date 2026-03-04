@@ -2,7 +2,7 @@ function BlockCreator() {
 
     const default_Block_Size = 20;
     const num_Blocks_Total = 20;
-    const num_Visual_Targets = 4;
+    const num_Visual_Targets = 8;
 
     this.GetDefaultBlockSize = function () {
         return default_Block_Size;
