@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="N-Back training for memory and intelligence">
+
+    <title> N-Back Test for CE-STAND </title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <!--<style>
+    body {
+        padding-top: 70px;
+        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    }
+    </style>-->
+
+    <!-- Bootstrap Toggle -->
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
+    <link href="css/n-back.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">CE-STAND Visual N-Back Cognitive Test</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#howToPlayModal">How To Play</a>
+                    </li>
+                    
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#aboutModal">About</a>
+                    </li>
+                </ul>
+            </div> <!-- /.navbar-collapse -->
+        </div> <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h1> N-Back Test for CE-STAND</h1>
+                <!-- <p class="lead">Dual n-back training for memory and intelligence.</p> -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h2> N-Back Game: Match the position of the box from N steps ago - press S for same site</h2>
+                <div style="margin-bottom:20px;">
+                <label><b>Select Level:</b></label>
+
+                <select id="level-select" class="form-control" style="width:120px;display:inline-block;">
+                <option value="1">1-Back</option>
+                <option value="2">2-Back</option>
+                <option value="3">3-Back</option>
+                </select>
+               
+            </div>
+        </div>
+
+        <!-- empty spacer row -->
+        <br />
+
+        <div class="row">
+            <div class="col-xs-6">
+                <p>Session: <span id="session-number">1 / 20</span></p>
+                <p>Score: <span id="score-text">0</span></p>
+            </div>
+            <div class="col-xs-6 text-right">
+                <p>Save progress: 
+                    <input id="save-toggle" type="checkbox" checked data-toggle="toggle" data-onstyle="success" data-offstyle="danger" data-on="Yes" data-off="No">
+                </p>
+            </div>
+        </div>
+
+        <!-- empty spacer row -->
+        <br />
+
+        <!-- main grid area -->
+        <div class="row">
+            <!-- 1st grid row -->
+            <div id="top-left" class="col-xs-2 col-xs-offset-3 text-center cell"></div>
+            <div id="top-middle" class="col-xs-2 text-center cell"></div>
+            <div id="top-right" class="col-xs-2 text-center cell"></div>
+        </div>
+
+        <!-- 2nd grid row -->
+        <div class="row">
+            <div id="middle-left" class="col-xs-2 col-xs-offset-3 text-center cell"></div>
+            <div id="middle" class="col-xs-2 text-center cell"></div>
+            <div id="middle-right" class="col-xs-2 text-center cell"></div>
+        </div>
+
+        <!-- final grid row -->
+        <div class="row">
+            <div id="bottom-left" class="col-xs-2 col-xs-offset-3 text-center cell"></div>
+            <div id="bottom-middle" class="col-xs-2 text-center cell"></div>
+            <div id="bottom-right" class="col-xs-2 text-center cell"></div>
+        </div>
+
+        <!-- empty spacer row -->
+        <br />
+
+        <!-- key indicator and progress bar -->
+        <div class="row">
+           
+            <div id="left-hand-feedback" class="col-xs-3 col-xs-offset-2 text-center">
+                <h4>S</h4>
+                <p>Press S when the box appears in the same position as N steps ago</p>
+            </div>
+            <div class="col-xs-4 text-center"></div>
+
+            <div class="col-xs-4 col-xs-offset-1 text-center">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" id="prog-bar" 
+                        role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+
+           
+
+        <!-- button row -->
+        <div class="row">
+            <div class="col-xs-2 col-xs-offset-5 text-center">
+                <button id="start-button" class="btn btn-default btn-lg" value="Start">Start</button>
+            </div>
+        </div>
+
+    </div><!-- /.container -->
+
+    <!-- empty spacer row -->
+    <br />
+
+
+    <!-- score modal dialog -->
+    <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Session complete!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="next-level-info">Next level: </p>
+                <p id="correct-visual-results">Correct visual results: </p>
+            </div>
+            <div class="modal-footer">
+                <button id="continue-button" class="btn btn-default" value="Continue" data-dismiss="modal">Continue</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- progress modal dialog -->
+    <div class="modal fade" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Progress History</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped" id="progress-score-table">
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Average N Level</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" value="Ok" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- how to play modal dialog -->
+    <div class="modal fade" id="howToPlayModal" tabindex="-1" role="dialog" aria-labelledby="howToPlayModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">How to Play</h4>
+            </div>
+            <div class="modal-body">
+            <p> When you press the <strong>Start</strong> button, the application will begin presenting a square that briefly appears in one of the positions in the grid. Your task is to remember the location of each square as it appears. </p>
+            <p> The game uses an <strong>N-back working memory task</strong>. The level (1-back, 2-back, or 3-back) determines how many steps back you must remember. </p>
+            
+            <ul>
+            <li><strong>1-Back:</strong> Compare the current square with the square shown <em>1 step earlier</em>.</li>
+            <li><strong>2-Back:</strong> Compare the current square with the square shown <em>2 steps earlier</em>.</li>
+            <li><strong>3-Back:</strong> Compare the current square with the square shown <em>3 steps earlier</em>.</li>
+            </ul>
+
+            <p> If the square appears in the <strong>same location as N steps ago</strong>, press the <strong>S key</strong>. </p>
+            <p> Each session contains <strong>20 observations (trials)</strong>. On each trial: </p>
+
+<ol>
+<li>A square briefly appears in one of the grid locations.</li>
+<li>You decide whether its location matches the location shown N steps earlier.</li>
+<li>If it matches, press <strong>S</strong>. If it does not match, do nothing.</li>
+</ol>
+
+<p>
+After the session ends, the system will display several performance metrics.
+</p>
+
+<h4>Performance Metrics</h4>
+
+<ul>
+<li><strong>Score:</strong> Number of correct responses. Each correct response earns <strong>1 point</strong>. Maximum score per session is <strong>20</strong>.</li>
+
+<li><strong>Correct Responses:</strong> Number of times the participant correctly identified a matching location.</li>
+
+<li><strong>Wrong Responses:</strong> Number of times the participant pressed <strong>S</strong> when there was <em>no matching location</em> (false positive).</li>
+
+<li><strong>Missed Targets:</strong> Number of times a match occurred but the participant did <em>not press S</em>.</li>
+
+<li><strong>Accuracy:</strong> Percentage of correct responses relative to the total number of trials.</li>
+
+<li><strong>Reaction Time:</strong> The average time (in milliseconds) between when the square appears and when the participant presses <strong>S</strong> for correct responses.</li>
+</ul>
+
+<p>
+This task measures <strong>working memory, attention, and cognitive processing speed</strong>. 
+It is commonly used in cognitive neuroscience and clinical research to assess executive function and memory performance.
+</p>
+
+</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- about modal dialog -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">About</h4>
+            </div>
+            <div class="modal-body">
+
+                <p>
+The Visual N-Back task is used in the CE-STAND study at the University of Minnesota Department of Neurosurgery as a computerized cognitive assessment of working memory and attention.
+
+During the task, a square briefly appears in different positions within a grid on the screen. Participants must remember the position of the squares as they appear over time and determine whether the current square appears in the same location as one presented a specified number of steps earlier (the N-Back level).
+
+Depending on the selected level (1-Back, 2-Back, or 3-Back), participants compare the current stimulus with the square that appeared one, two, or three steps earlier. When a match occurs, participants respond using the keyboard.
+
+This task places demands on working memory, sustained attention, and cognitive processing. Within CE-STAND, it is used as a standardized tool to measure cognitive performance and track changes in attention and memory across testing sessions.
+</p>
+
+                
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap toggle -->
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <!-- NBack js scripts -->
+    <script src="js/SquarePosition.js"></script>
+    <script src="js/TargetKind.js"></script>
+    <script src="js/TrialResult.js"></script>
+    <script src="js/Page.js"></script>
+    <script src="js/Score.js"></script>
+    <script src="js/Block.js"></script>
+    <script src="js/BlockCreator.js"></script>
+    <script src="js/Trial.js"></script>
+    <script src="js/App.js"></script>
+</body>
+
+</html>
