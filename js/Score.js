@@ -6,13 +6,14 @@ function Score() {
 
     this._visualKeyPressed = false;
 
-    this._score = 0;
-
-    this._correct = 0;
-    this._wrong = 0;
-    this._missed = 0;
+    this._hits = 0;              // pressed S correctly
+    this._falseAlarms = 0;       // pressed S when no match
+    this._missed = 0;            // did not press when match
+    this._correctRejections = 0; // correctly did nothing
 
     this._trialCount = 0;
+
+    this._targets = 0;
 
     this._reactionTimes = [];
 
@@ -27,8 +28,11 @@ function Score() {
 
         this._visualKeyPressed = false;
 
-        this._trialStartTime = performance.now();
+        if(correctAnswer === TargetKind.Visual){
+            this._targets++;
+        }
 
+        this._trialStartTime = performance.now();
     }
 
 
@@ -46,26 +50,22 @@ function Score() {
 
         self._reactionTimes.push(reactionTime);
 
-
         if(self._target === TargetKind.Visual) {
 
             handleTrialResult(TrialResult.Visual_Success);
 
-            self._score += 1;
-            self._correct += 1;
+            self._hits++;
 
         }
-
         else {
 
             handleTrialResult(TrialResult.Visual_Failure);
 
-            self._wrong += 1;
+            self._falseAlarms++;
 
         }
 
     }
-
 
 
     /* ---------- END TRIAL ---------- */
@@ -74,13 +74,17 @@ function Score() {
 
         self._trialCount++;
 
-        if(self._target === TargetKind.Visual && self._visualKeyPressed === false) {
+        if(self._target === TargetKind.Visual && !self._visualKeyPressed) {
 
-            self._missed += 1;
+            self._missed++;
 
         }
 
-        handleScores(self._score);
+        if(self._target !== TargetKind.Visual && !self._visualKeyPressed) {
+
+            self._correctRejections++;
+
+        }
 
         this._target = TargetKind.None;
         this._visualKeyPressed = false;
@@ -88,22 +92,21 @@ function Score() {
     }
 
 
-
     /* ---------- START BLOCK ---------- */
 
     this.startBlock = function() {
 
-        this._score = 0;
-        this._correct = 0;
-        this._wrong = 0;
+        this._hits = 0;
+        this._falseAlarms = 0;
         this._missed = 0;
+        this._correctRejections = 0;
 
         this._trialCount = 0;
+        this._targets = 0;
 
         this._reactionTimes = [];
 
     }
-
 
 
     /* ---------- END BLOCK ---------- */
@@ -111,16 +114,27 @@ function Score() {
     this.endBlock = function() {
 
         return {
-            score: this._score,
-            correct: this._correct,
-            wrong: this._wrong,
+            totalTrials: this._trialCount,
+            targets: this._targets,
+            hits: this._hits,
             missed: this._missed,
+            falseAlarms: this._falseAlarms,
+            correctRejections: this._correctRejections,
+            correctDecisions: this.getCorrectDecisions(),
             accuracy: this.getAccuracy(),
             meanReactionTime: this.getMeanReactionTime()
         };
 
     }
 
+
+    /* ---------- TOTAL CORRECT DECISIONS ---------- */
+
+    this.getCorrectDecisions = function(){
+
+        return this._hits + this._correctRejections;
+
+    }
 
 
     /* ---------- ACCURACY ---------- */
@@ -129,10 +143,11 @@ function Score() {
 
         if(this._trialCount === 0) return 0;
 
-        return ((this._correct / this._trialCount) * 100).toFixed(2);
+        var correct = this._hits + this._correctRejections;
+
+        return ((correct / this._trialCount) * 100).toFixed(2);
 
     }
-
 
 
     /* ---------- MEAN REACTION TIME ---------- */
@@ -144,7 +159,9 @@ function Score() {
         var sum = 0;
 
         this._reactionTimes.forEach(function(rt) {
+
             sum += rt;
+
         });
 
         return (sum / this._reactionTimes.length).toFixed(2);

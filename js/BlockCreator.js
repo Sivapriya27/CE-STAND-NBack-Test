@@ -14,118 +14,105 @@ function BlockCreator() {
 
     this.createBlock = function (n) {
 
-        var targets = this.getTargets();
         var trials = [];
+        var targets = this.getTargets();
 
-        // first n trials cannot be targets
-        for (var i = 0; i < n; i++) {
-            var t = this.getRandomTrial();
-            t.SetSecondTrialInTarget(TargetKind.TooEarly);
-            trials.push(t);
-        }
+        for (var i = 0; i < default_Block_Size; i++) {
 
-        for (var i = n; i < default_Block_Size + n; i++) {
+            var position;
 
-            var trialToAdd = this.getRandomTrialNoMatch(trials[i - n]);
+            // prevent first n trials from being targets
+            if (i < n) {
 
-            var matchingKind = targets.find(function (el) {
-                return el.Key === (i - n);
-            });
+                position = this.getRandomPosition(
+                    trials.length > 0 ? trials[i - 1].GetPosition() : null
+                );
 
-            if (matchingKind !== undefined) {
+                var t = new Trial(position);
+                t.SetSecondTrialInTarget(TargetKind.TooEarly);
 
-                var trialAlreadyAdded = trials[i - n];
-
-                trialToAdd.SetSecondTrialInTarget(TargetKind.Visual);
-
-                trialToAdd.SetPosition(trialAlreadyAdded.GetPosition());
+                trials.push(t);
+                continue;
             }
 
-            trials.push(trialToAdd);
+            // check if this index should be a target
+            var isTarget = targets.includes(i);
+
+            if (isTarget) {
+
+                var matchTrial = trials[i - n];
+
+                var t = new Trial(matchTrial.GetPosition());
+                t.SetSecondTrialInTarget(TargetKind.Visual);
+
+                trials.push(t);
+
+            } else {
+
+                var previousPosition = trials[i - 1].GetPosition();
+                var forbiddenPosition = trials[i - n].GetPosition();
+
+                position = this.getRandomPosition(previousPosition, forbiddenPosition);
+
+                var t = new Trial(position);
+                t.SetSecondTrialInTarget(TargetKind.None);
+
+                trials.push(t);
+            }
         }
 
         return trials;
     }
 
+
+    /* ---------- GENERATE TARGET INDEXES ---------- */
+
     this.getTargets = function () {
 
         var targets = [];
 
-        for (var i = 0; i < num_Visual_Targets; i++) {
+        while (targets.length < num_Visual_Targets) {
 
-            var iTargetLocation = this.getRandomTargetLocation(targets);
+            var index = Math.floor(Math.random() * default_Block_Size);
 
-            var target = {};
-            target.Key = iTargetLocation;
-            target.Value = TargetKind.Visual;
-
-            targets.push(target);
+            if (!targets.includes(index)) {
+                targets.push(index);
+            }
         }
 
         targets.sort(function (a, b) {
-            return a.Key - b.Key;
+            return a - b;
         });
 
         return targets;
     }
 
-    this.getRandomTargetLocation = function (targets) {
 
-        var iLocation = 0;
+    /* ---------- RANDOM POSITION ---------- */
 
-        do {
+    this.getRandomPosition = function (previousPosition, forbiddenPosition) {
 
-            iLocation = Math.floor((Math.random() * default_Block_Size));
-
-            var findElement = targets.find(function (el) {
-                return el.Key === iLocation;
-            });
-
-            if (findElement === undefined) {
-                break;
-            }
-
-        } while (true);
-
-        return iLocation;
-    }
-
-    this.getRandomTrialNoMatch = function (noMatch) {
-
-        var s;
+        var pos;
 
         do {
 
-            var rand = Math.floor((Math.random() * 8));
+            var rand = Math.floor(Math.random() * 8);
+            pos = squarePositionIndexer(rand);
 
-            s = squarePositionIndexer(rand);
+        }
+        while (
+            pos === previousPosition ||
+            pos === forbiddenPosition
+        );
 
-            if (s != noMatch.GetPosition()) {
-                break;
-            }
-
-        } while (true);
-
-        var t = new Trial(s);
-
-        return t;
-    }
-
-    this.getRandomTrial = function () {
-
-        var rand = Math.floor((Math.random() * 8));
-
-        var s = squarePositionIndexer(rand);
-
-        var t = new Trial(s);
-
-        return t;
+        return pos;
     }
 
 }
 
 
-// enum helper
+
+/* ---------- POSITION ENUM HELPER ---------- */
 
 function squarePositionIndexer(i) {
 

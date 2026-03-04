@@ -143,13 +143,18 @@ function Page() {
     document.getElementById("next-level-info").innerHTML =
         "Session complete";
 
-    document.getElementById("correct-visual-results").innerHTML =
-        "Score: " + results.score + " / 20 <br>" +
-        "Correct: " + results.correct + "<br>" +
-        "Wrong responses: " + results.wrong + "<br>" +
-        "Missed targets: " + results.missed + "<br>" +
-        "Accuracy: " + results.accuracy + "%<br>" +
-        "Mean Reaction Time: " + results.meanReactionTime + " ms";
+    var results = self._score.endBlock();
+
+document.getElementById("correct-visual-results").innerHTML =
+"Total Trials: " + results.totalTrials + "<br>" +
+"Targets: " + results.targets + "<br><br>" +
+"Hits: " + results.hits + "<br>" +
+"Misses: " + results.missed + "<br>" +
+"False Alarms: " + results.falseAlarms + "<br>" +
+"Correct Rejections: " + results.correctRejections + "<br><br>" +
+"Total Correct Decisions: " + results.correctDecisions + "<br>" +
+"Accuracy: " + results.accuracy + "%<br>" +
+"Mean Reaction Time: " + results.meanReactionTime + " ms";
 
     $('#scoreModal').modal('show');
 
