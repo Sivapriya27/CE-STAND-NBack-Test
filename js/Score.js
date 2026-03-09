@@ -114,15 +114,14 @@ function Score() {
     this.endBlock = function() {
 
         return {
-            totalTrials: this._trialCount,
-            targets: this._targets,
-            hits: this._hits,
-            missed: this._missed,
-            falseAlarms: this._falseAlarms,
-            correctRejections: this._correctRejections,
-            correctDecisions: this.getCorrectDecisions(),
-            accuracy: this.getAccuracy(),
-            meanReactionTime: this.getMeanReactionTime()
+           totalTrials: this._trialCount,
+           targets: this._targets,
+           hits: this._hits,
+           missed: this._missed,
+           falseAlarms: this._falseAlarms,
+           correctRejections: this._correctRejections,
+           matchAccuracy: this.getMatchAccuracy(),
+           meanReactionTime: this.getMeanReactionTime()
         };
 
     }
@@ -139,15 +138,14 @@ function Score() {
 
     /* ---------- ACCURACY ---------- */
 
-    this.getAccuracy = function() {
+    this.getMatchAccuracy = function() {
 
-        if(this._trialCount === 0) return 0;
+    if(this._targets === 0) return 0;
 
-        var correct = this._hits + this._correctRejections;
+    return ((this._hits / this._targets) * 100).toFixed(2);
 
-        return ((correct / this._trialCount) * 100).toFixed(2);
-
-    }
+}
+    
 
 
     /* ---------- MEAN REACTION TIME ---------- */

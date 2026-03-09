@@ -145,16 +145,19 @@ function Page() {
 
     var results = self._score.endBlock();
 
+var results = self._score.endBlock();
+
 document.getElementById("correct-visual-results").innerHTML =
-"Total Trials: " + results.totalTrials + "<br>" +
-"Targets: " + results.targets + "<br><br>" +
-"Hits: " + results.hits + "<br>" +
-"Misses: " + results.missed + "<br>" +
-"False Alarms: " + results.falseAlarms + "<br>" +
-"Correct Rejections: " + results.correctRejections + "<br><br>" +
-"Total Correct Decisions: " + results.correctDecisions + "<br>" +
-"Accuracy: " + results.accuracy + "%<br>" +
-"Mean Reaction Time: " + results.meanReactionTime + " ms";
+"Total Observations: " + results.totalTrials + "<br>" +
+"Matches: " + results.targets + "<br><br>" +
+
+"Correct Matches: " + results.hits + "<br>" +
+"Missed Matches: " + results.missed + "<br>" +
+"False Alarms (False Positive): " + results.falseAlarms + "<br>" +
+"Correct Rejections (True Negative): " + results.correctRejections + "<br><br>" +
+
+"Match Accuracy: " + results.matchAccuracy + "%<br>" +
+"Average Reaction Time: " + results.meanReactionTime + " ms";
 
     $('#scoreModal').modal('show');
 
@@ -227,7 +230,8 @@ document.getElementById("correct-visual-results").innerHTML =
 
 function handleScores(totalScore) {
 
-    document.getElementById("score-text").innerHTML = totalScore;
+    // score display removed from UI
+    return;
 
 }
 
